@@ -1,0 +1,21 @@
+{
+  "images" : [
+    {
+      "filename" : "Продолжая, вы соглашаетесь с Условиями и Политикой конфиденциальности приложения.svg",
+      "idiom" : "universal",
+      "scale" : "1x"
+    },
+    {
+      "idiom" : "universal",
+      "scale" : "2x"
+    },
+    {
+      "idiom" : "universal",
+      "scale" : "3x"
+    }
+  ],
+  "info" : {
+    "author" : "xcode",
+    "version" : 1
+  }
+}
