@@ -29,22 +29,7 @@ class CountryViewController: UIViewController {
     
     func configuration() {
         for code in NSLocale.isoCountryCodes {
-            let id = NSLocale.localeIdentifier(fromComponents: [NSLocale.Key.countryCode.rawValue: code])
-            let name = NSLocale(localeIdentifier: "ru_RU").displayName(forKey: NSLocale.Key.identifier, value: id)
-            let locale = NSLocale.init(localeIdentifier: id)
-            
-            let countryCode = locale.object(forKey: NSLocale.Key.countryCode)
-//            let countryName = locale.object(forKey: NSLocale.Key.countryCode)
-//            let countryFlag = locale.object(forKey: NSLocale.Key.countryCode)
-            
-            if name != nil {
-                let model = Country()
-                model.countryName = name
-                model.countryCode = countryCode as? String
-                model.countryFlag = String.flag(for: code)
-                model.extensionCode = NSLocale().extensionCode(countryCode: model.countryCode)
-                list.append(model)
-            }
+            list.append(getCountry(code: code))
         }
         self.dupList = getPreparedCountries(countries: self.list)
         self.tableView.reloadData()
@@ -77,6 +62,12 @@ extension CountryViewController: UITableViewDelegate, UITableViewDataSource {
         isLastRowInSection()
 
         return cell
+    }
+    
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        let vc = UIStoryboard.init(name: "Main", bundle: nil).instantiateViewController(withIdentifier: "MobileController") as! MobileController
+        vc.country = dupList[indexPath.row]
+        self.navigationController?.pushViewController(vc, animated: true)
     }
     
     
@@ -369,8 +360,26 @@ extension CountryViewController: UISearchBarDelegate  {
         })
         self.tableView.reloadData()
     }
+    
 }
 
 func getPreparedCountries(countries: [Country]) -> [Country] {
     return countries.filter {$0.extensionCode != nil}
 }
+
+func getCountry(code: String) -> Country {
+    let id = NSLocale.localeIdentifier(fromComponents: [NSLocale.Key.countryCode.rawValue: code])
+    let name = NSLocale(localeIdentifier: "ru_RU").displayName(forKey: NSLocale.Key.identifier, value: id)
+    let locale = NSLocale.init(localeIdentifier: id)
+    
+    let countryCode = locale.object(forKey: NSLocale.Key.countryCode)
+    
+    let model = Country()
+    model.countryName = name
+    model.countryCode = countryCode as? String
+    model.countryFlag = String.flag(for: code)
+    model.extensionCode = NSLocale().extensionCode(countryCode: model.countryCode)
+    
+    return model
+}
+

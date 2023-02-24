@@ -10,8 +10,14 @@ import UIKit
 class MobileController: UIViewController {
     
     @IBOutlet weak var scrollView: UIScrollView!
+    @IBOutlet weak var countryBtn: UIButton!
     @IBOutlet weak var textField: UITextField!
     @IBOutlet weak var btnLogin: UIButton!
+    
+    @IBAction func countryButton(_ sender: UIButton) {
+        let controller = UIStoryboard(name: "Main", bundle: nil).instantiateViewController(withIdentifier: "CountryViewController") as! CountryViewController
+        navigationController?.pushViewController(controller, animated: true)
+    }
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -21,6 +27,14 @@ class MobileController: UIViewController {
         
         NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillHideNotification), name: UIResponder.keyboardWillShowNotification, object: nil)
     }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        let country = country ?? getCountry(code: "RU")
+        let title = "\(country.countryFlag!) +\(country.extensionCode!)"
+        countryBtn.setTitle(title, for: .normal)
+    }
+    
+    var country: Country?
     
     
     @objc func keyboardWillShowNotification(notification: Notification) {

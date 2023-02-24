@@ -83,7 +83,18 @@ class OTPController: UIViewController {
             case tf3:
                 tf4.becomeFirstResponder()
             case tf4:
-                print("OTP = \(tf1.text!)\(tf2.text!)\(tf3.text!)\(tf4.text!)")
+                let otp = "\(tf1.text!)\(tf2.text!)\(tf3.text!)\(tf4.text!)"
+                print("OTP = \(otp)")
+                var nextStep: UIViewController
+                if (otp == "0000") {
+                    print("Успешный OTP")
+                    nextStep = UIStoryboard.init(name: "Main", bundle: nil).instantiateViewController(withIdentifier: "ProfileController") as! ProfileController
+                    
+                } else {
+                    print("Ошибка в OTP")
+                    nextStep = UIStoryboard.init(name: "Main", bundle: nil).instantiateViewController(withIdentifier: "WrongCodeController") as! WrongCodeController
+                }
+                self.navigationController?.pushViewController(nextStep, animated: true)
             default:
                 break
             }
