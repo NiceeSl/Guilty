@@ -56,12 +56,15 @@ class ProfileController: UIViewController, UITextFieldDelegate{
         warningLbl.isHidden = false
     }
     
-    func validateLoginField(newLoginSymbol: String) -> Bool {
+    func validateLoginField(newLoginSymbol: String?) -> Bool {
         var loginFieldValue = (loginField?.text ?? "")
+        if(newLoginSymbol == nil) {
+            return false
+        }
         if (newLoginSymbol == "") {
             loginFieldValue.removeLast()
         } else {
-            loginFieldValue.append(newLoginSymbol)
+            loginFieldValue.append(newLoginSymbol!)
         }
         if (loginFieldValue.isEmpty) {
             disableContinueButton()
@@ -80,13 +83,18 @@ class ProfileController: UIViewController, UITextFieldDelegate{
         if(mainPhoto.image == nil) {
             disableContinueButton()
             warningLbl.text = "Обязательное поле"
+            mainPhoto.layer.cornerRadius = 20
+            mainPhoto.layer.borderColor = UIColor.red.cgColor
+            mainPhoto.layer.borderWidth = 1.0
             return false
         }
+        mainPhoto.layer.borderColor = .none
         photoProfileLbl.textColor = .white
+        warningLbl.isHidden = true
         return true
     }
     
-    func validate(newLoginSymbol: String) {
+    func validate(newLoginSymbol: String?) {
         if (validateLoginField(newLoginSymbol: newLoginSymbol) && validateMainPhoto()) {
             isValid = true
             continueButton.setImage(UIImage(named: "Botton red norma"), for: .normal)
@@ -111,7 +119,7 @@ extension ProfileController: UIImagePickerControllerDelegate, UINavigationContro
         if let image = info[UIImagePickerController.InfoKey(rawValue: "UIImagePickerControllerEditedImage")] as? UIImage {
             mainPhoto.image = image
         }
-        validateMainPhoto()
+        validate(newLoginSymbol: nil)
         picker.dismiss(animated: true, completion: nil)
     }
     
