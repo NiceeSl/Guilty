@@ -28,7 +28,7 @@ class OTPController: UIViewController {
     }
     
     var timer = Timer()
-    var time = 5 {
+    var time = 60 {
         didSet {
             timerLBL.text = "\(time)"
         }
@@ -94,7 +94,8 @@ class OTPController: UIViewController {
                     print("Ошибка в OTP")
                     nextStep = UIStoryboard.init(name: "Main", bundle: nil).instantiateViewController(withIdentifier: "WrongCodeController") as! WrongCodeController
                 }
-                self.navigationController?.pushViewController(nextStep, animated: true)
+                nextStep.modalPresentationStyle = .fullScreen
+                present(nextStep, animated: true, completion: nil)
             default:
                 break
             }

@@ -7,8 +7,16 @@
 import PhotosUI
 import UIKit
 
-class ProfileController: UIViewController, UITextFieldDelegate{
+class ProfileController: UIViewController, UITextFieldDelegate, PHPickerViewControllerDelegate{
     
+    func picker(_ picker: PHPickerViewController, didFinishPicking results: [PHPickerResult]) {
+    }
+    
+    @IBAction func openHiddenPhotosAction(_ sender: UIButton) {
+        let controller = UIStoryboard(name: "Main", bundle: nil).instantiateViewController(withIdentifier: "hiddenPhotosController") as! hiddenPhotosController
+        present(controller, animated: true, completion: nil)
+        user?.username = loginField.text ?? ""
+    }
     @IBOutlet weak var mainPhoto: UIImageView!
     @IBOutlet weak var hiddenPhoto: UIImageView!
     @IBOutlet weak var continueButton: UIButton!
@@ -23,10 +31,13 @@ class ProfileController: UIViewController, UITextFieldDelegate{
         }
         else if (isValid == true) {
             let controller = UIStoryboard(name: "Main", bundle: nil).instantiateViewController(withIdentifier: "PersonalInfoController") as! PersonalInfoController
-            navigationController?.pushViewController(controller, animated: true)
+            controller.modalPresentationStyle = .fullScreen
+            present(controller, animated: true, completion: nil)
+            
         }
     }
     
+    var user: Profile?
     var isValid: Bool = false
     
     @IBAction func mainPhotoButton(_ sender: UIButton) {
@@ -38,10 +49,13 @@ class ProfileController: UIViewController, UITextFieldDelegate{
     }
     
     @IBAction func hiddenPhotoButton(_ sender: UIButton) {
-        let config = PHPickerConfiguration()
+        var config = PHPickerConfiguration()
+        config.selectionLimit = 3
         
         let phPickerVC = PHPickerViewController(configuration: config)
+        phPickerVC.delegate = self
         self.present(phPickerVC, animated: true)
+
     }
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -117,8 +131,10 @@ extension ProfileController: UIImagePickerControllerDelegate, UINavigationContro
     func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey: Any]) {
         
         if let image = info[UIImagePickerController.InfoKey(rawValue: "UIImagePickerControllerEditedImage")] as? UIImage {
+            user?.mainPhoto = image
             mainPhoto.image = image
         }
+        
         validate(newLoginSymbol: nil)
         picker.dismiss(animated: true, completion: nil)
     }
@@ -126,6 +142,7 @@ extension ProfileController: UIImagePickerControllerDelegate, UINavigationContro
     func imagePickerControllerDidCancel(_ picker: UIImagePickerController) {
         picker.dismiss(animated: true, completion: nil)
     }
+    
 }
 
 private var __maxLengths = [UITextField: Int]()
