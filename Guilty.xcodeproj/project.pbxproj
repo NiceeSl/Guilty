@@ -101,16 +101,8 @@
 				6DFEC5A4299A68730080D203 /* modelCountry.swift */,
 				6D917C6529ACE355005818B6 /* ProfileModel.swift */,
 				6D7B6F31299650000023BC75 /* Info.plist */,
-				6D7B6F4129966BC50023BC75 /* Fonts */,
 			);
 			path = Guilty;
-			sourceTree = "<group>";
-		};
-		6D7B6F4129966BC50023BC75 /* Fonts */ = {
-			isa = PBXGroup;
-			children = (
-			);
-			path = Fonts;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
